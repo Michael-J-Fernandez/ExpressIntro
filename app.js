@@ -37,8 +37,6 @@ app.get('/all-movies', (req, res) => {
 app.get('/all-movies/:starRating', (req, res) => {
 
     const requestedStarRating = Number(req.params.starRating);
-    console.log(req.params);
-
     const filteredByRating = favoriteMovieList.filter(movie => movie.starRating >= requestedStarRating)
 
     if (requestedStarRating !== undefined &&
@@ -110,15 +108,8 @@ app.post('/new-movie', (req, res) => {
 
 app.put('/update-movie/:titleToUpdate', (req, res) => {
     const titleToUpdate = req.params.titleToUpdate;
-
     const originalMovieIndex = favoriteMovieList.findIndex(movie => movie.title === titleToUpdate);
-
     const originalMovie = favoriteMovieList[originalMovieIndex];
-
-    console.log(titleToUpdate);
-    console.log(originalMovieIndex);
-    console.log(originalMovie);
-
     const updatedMovie = {};
     
     if (req.body.title !== undefined) {
