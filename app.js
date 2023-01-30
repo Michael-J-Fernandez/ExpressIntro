@@ -41,6 +41,32 @@ app.get('/single-movie/:titleToFind', (req, res) => {
 })
 
 app.post('/new-movie', (req, res) => {
+
+    if (req.body.title === undefined || typeof(req.body.title) !== "string") {
+		res.json({
+			success: false,
+			message: "Film title is required and must be a string."
+		})
+		return;
+	}
+    if (req.body.starRating === undefined ||
+        typeof(req.body.starRating) !== "number" ||
+        req.body.starRating < 0 ||
+        req.body.starRating > 5) {
+		res.json({
+			success: false,
+			message: "Film must have a rating, which must be a number between 0 and 5."
+		})
+		return;
+	}
+    if (typeof req.body.isRecommended !== "boolean") {
+		res.json({
+			success: false,
+			message: "Film must have an 'isRecommeded' property, which must be a boolean value."
+		})
+		return;
+	}
+
     const newMovie = {};
     newMovie.title = req.body.title;
     newMovie.starRating = req.body.starRating;
@@ -57,7 +83,9 @@ app.post('/new-movie', (req, res) => {
 
 app.put('/update-movie/:titleToUpdate', (req, res) => {
     const titleToUpdate = req.params.titleToUpdate;
+
     const originalMovieIndex = favoriteMovieList.findIndex(movie => movie.title === titleToUpdate);
+
     const originalMovie = favoriteMovieList[originalMovieIndex];
 
     console.log(titleToUpdate);
@@ -109,3 +137,5 @@ app.delete('/delete-movie/:titleToDelete', (req, res) => {
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
+
+
