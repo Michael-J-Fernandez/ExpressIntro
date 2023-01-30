@@ -25,10 +25,37 @@ app.get('/', (req, res) => {
 })
 
 app.get('/all-movies', (req, res) => {
+    const requestedStarRating = Number(req.params.starRating);
+    const filteredByRating = favoriteMovieList.filter(movie => movie.starRating >= requestedStarRating)
     res.json({
         success: true,
         favoriteMovieList,
     })
+
+})
+
+app.get('/all-movies/:starRating', (req, res) => {
+
+    const requestedStarRating = Number(req.params.starRating);
+    console.log(req.params);
+
+    const filteredByRating = favoriteMovieList.filter(movie => movie.starRating >= requestedStarRating)
+
+    if (requestedStarRating !== undefined &&
+        typeof requestedStarRating === "number" &&
+        requestedStarRating >= 0 &&
+        requestedStarRating <= 5) {
+        res.json({
+            success: true,
+            filteredByRating,
+        })
+        return;
+    } else {
+        res.json({
+            success: false,
+            message: "Star rating must be a number between 0 and 5."
+        })
+    }
 })
 
 app.get('/single-movie/:titleToFind', (req, res) => {
